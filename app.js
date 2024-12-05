@@ -8,11 +8,12 @@ const db = require('./database/db');
 
 const expressLayouts = require('express-ejs-layouts');
 
-
-
 const session = require('express-session');
 const authRoutes = require('./routes/authRoutes');
 const { isAuthenticated } = require('./middlewares/middleware.js');
+
+// Middleware untuk file statis (seperti gambar)
+app.use(express.static('public'));  // Menambahkan folder public agar bisa diakses secara langsung
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -31,10 +32,7 @@ app.use(session({
     cookie: { secure: false } // Set ke true jika menggunakan HTTPS
 }));
 
-
 app.use("/", authRoutes);
-
-
 
 app.get('/', isAuthenticated, (req, res) => {
     res.render('index',{
